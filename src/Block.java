@@ -1,3 +1,4 @@
+import javax.swing.plaf.synth.SynthUI;
 import java.util.Date;
 
 public class Block {
@@ -5,6 +6,7 @@ public class Block {
     public String previousHash;
     private String data;
     private long timestamp;
+    private int nonce;
 
     public Block(String previousHash, String data) {
         this.previousHash = previousHash;
@@ -14,7 +16,20 @@ public class Block {
     }
 
     public String calculateHash(){
-        return StringUtil.applySHA256(previousHash + Long.toString(timestamp) + data);
+        return StringUtil.applySHA256(previousHash + Long.toString(timestamp) + nonce + data);
+    }
+
+    public void mine(int difficulty){
+        String target = new String(new char[difficulty]).replace('\0', '0');
+        target = "2245d";
+
+        while(!hash.substring(0, difficulty).equals(target)){
+            nonce++;
+            hash = calculateHash();
+        }
+        System.out.println("Block " + hash + " mined");
+        System.out.println(target);
+        System.out.println(nonce);
     }
 
     public String getHash() {

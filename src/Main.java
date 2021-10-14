@@ -5,13 +5,19 @@ import java.util.ArrayList;
 
 public class Main {
     static ArrayList<Block> blockchain = new ArrayList<>();
+    static int difficulty = 5;
 
     public static void main(String[] args){
         Block b1 = new Block("0", "first");
-        blockchain.add(b1);
-        Block b2 = new Block(blockchain.get(blockchain.size() - 1).getHash(), "second");
+        b1.mine(difficulty);
 
+        blockchain.add(b1);
+
+        Block b2 = new Block(blockchain.get(blockchain.size() - 1).getHash(), "second");
+        b2.mine(difficulty);
         blockchain.add(b2);
+
+        System.out.println(isChainValid());
 
         String blockchainJson = new GsonBuilder().setPrettyPrinting().create().toJson(blockchain);
         System.out.println(blockchainJson);
@@ -29,6 +35,7 @@ public class Main {
                 return false;
             if(!cur.getHash().equals(cur.calculateHash()))
                 return false;
+
         }
         return true;
     }
